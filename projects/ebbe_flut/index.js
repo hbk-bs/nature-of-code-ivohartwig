@@ -1,46 +1,48 @@
-const x = (n) => width * n;
-const y = (n) => height * n;
-const s = (n) => (height > width ? height * n : width * n);
+function setup() {
+  createCanvas(300, 300);
+  background(255);
+  noFill();
+  stroke(0);
+  
+  let spacing = 15; // Reduzierter Abstand zwischen den Linien
+  let noiseScale = 0.05; // Skalierung für die Perlin-Noise-Verzerrung
 
-
-function setup(){
- createCanvas (400,400)
- strokeWeight(0)
-  
- colorMode(HSL, 360, 100, 100, 100);
-	const myPrimaryColor = color(80, 30, 50);
-  
- background (myPrimaryColor)
-  
- const secondaryColor = color((hue(myPrimaryColor) + 180) % 360, 100,  50);
- console.log(hue(myPrimaryColor) + 180); 
-  
-  
-  let h = hue(secondaryColor)
-  let sat = saturation(secondaryColor)
-  
-  let l = lightness(secondaryColor)
-  let l1 = lightness(secondaryColor)+10
-  let l2 = lightness(secondaryColor)+20
-  let l3 = lightness(secondaryColor)+30
-  
-  
-  
-  fill(h,sat,l)
-  ellipse(x(0.2),y(0.5),s(0.2))
-  fill(h,sat,l1)
-  ellipse(x(0.4),y(0.5),s(0.3))
-  fill(h,sat,l2)
-  ellipse(x(0.6),y(0.5),s(0.4))
-  fill(h,sat,l3)
-  ellipse(x(0.8),y(0.5),s(0.5))
-}
-
- //save images 
-  function keyPressed(){
-    if(key==="s"){
-      save("overlap");
+  for (let y = 0; y < height; y += spacing) {
+    let isDrawing = false; // Zustand, ob gezeichnet wird
+    for (let x = 0; x <= width; x += 5) { // Kleinere Schritte für feinere Linien
+      let offset = noise(x * noiseScale, y * noiseScale) * 20; // zufällige Höhenverzerrung
+      if (random(1) > 0.1) { // 90% Wahrscheinlichkeit, weiterzuzeichnen
+        if (!isDrawing) {
+          beginShape();
+          isDrawing = true;
+        }
+        curveVertex(x, y + offset); // Geschwungene Linien
+      } else if (isDrawing) {
+        endShape();
+        isDrawing = false;
+      }
     }
+    if (isDrawing) endShape(); // Beende die Linie, falls sie noch offen ist
   }
+
+  // Zwischenverbindungen hinzufügen
+  for (let y = spacing / 2; y < height; y += spacing) {
+    let isDrawing = false; // Zustand, ob gezeichnet wird
+    for (let x = 0; x <= width; x += 5) {
+      let offset = noise(x * noiseScale, y * noiseScale) * 20;
+      if (random(1) > 0.1) { // 90% Wahrscheinlichkeit, weiterzuzeichnen
+        if (!isDrawing) {
+          beginShape();
+          isDrawing = true;
+        }
+        curveVertex(x, y + offset); // Verbindungen zwischen den Hauptlinien
+      } else if (isDrawing) {
+        endShape();
+        isDrawing = false;
+      }
+    }
+    if (isDrawing) endShape(); // Beende die Linie, falls sie noch offen ist
+  }
+}
 
 
