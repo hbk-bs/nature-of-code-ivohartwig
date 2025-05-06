@@ -4,7 +4,7 @@ let linien = [];
 let abstosser = [];
 
 function setup() {
-  createCanvas(300, 100);
+  createCanvas(300, 300);
   grundBild = createGraphics(width, height);
   grundBild.background(155);
   grundBild.noFill();
@@ -64,11 +64,11 @@ function draw() {
   image(grundBild, 0, 0);
 
   for (let t of teilchen) {
-    // Auftrieb verstärken, aber weniger stark für langsamere Bewegung
-    t.wendeKraftAn(createVector(0, -0.1));  // Schwächerer Auftrieb für langsamere Bewegung
+    // Auftrieb verstärken
+    t.wendeKraftAn(createVector(0, -0.15));  // Stärkerer Auftrieb
     
-    // Leichte seitliche Zufallskraft
-    let seitlicheKraft = createVector(random(-0.05, 0.05), 0); 
+    // Leichte seitliche Zufallskraft für Fluidität
+    let seitlicheKraft = createVector(random(-0.03, 0.03), 0);
     t.wendeKraftAn(seitlicheKraft);
 
     // Abstosser-Kräfte
@@ -113,14 +113,13 @@ function speichereLinie(punkte) {
 class Teilchen {
   constructor(x, y) {
     this.pos = createVector(x, y);
-    this.vel = createVector(random(-0.3, 0.3), -1.0); // Mehr Aufwärtsgeschwindigkeit am Start
+    this.vel = createVector(random(-0.2, 0.2), -0.8); // Stärkere variable Startgeschwindigkeit
     this.acc = createVector(0, 0);
     this.radius = 1.5;
-    this.maxGeschwindigkeit = 3.0; // Von 2.5 auf 3.0 erhöht für schnelleres Durchfließen
+    this.maxGeschwindigkeit = 2.5; // Höhere max. Geschwindigkeit
     this.abprallZähler = 0;
-    this.steckenZähler = 0;
-    this.letztePos = createVector(x, y);
-    this.lebensdauer = random(300, 600); // Lebensdauer hinzufügen, falls Teilchen trotzdem steckenbleiben
+    this.steckenZähler = 0; // Zählt wie lange ein Teilchen kaum Bewegung hat
+    this.letztePos = createVector(x, y); // Speichert die vorherige Position
   }
 
   wendeKraftAn(kraft) {
@@ -128,7 +127,6 @@ class Teilchen {
   }
 
   aktualisiere() {
-    this.lebensdauer--;
     this.vel.add(this.acc);
     this.vel.limit(this.maxGeschwindigkeit);
     
@@ -138,24 +136,20 @@ class Teilchen {
     this.pos.add(this.vel);
     this.acc.mult(0);
     
-    // Prüfen ob Teilchen steckengeblieben ist - empfindlicher reagieren
+    // Prüfen ob Teilchen steckengeblieben ist
     let bewegungsDist = dist(this.pos.x, this.pos.y, this.letztePos.x, this.letztePos.y);
-    if (bewegungsDist < 0.3) { // Erhöht von 0.2 auf 0.3 für frühere Erkennung
+    if (bewegungsDist < 0.2) {
       this.steckenZähler++;
     } else {
       this.steckenZähler = 0;
     }
     
-    // Teilchen schneller befreien
-    if (this.steckenZähler > 10) { // Reduziert von 15 auf 10
-      // Stärkere Befreiungsbewegung
-      this.vel = p5.Vector.random2D().mult(this.maxGeschwindigkeit * 1.2);
-      this.vel.y = -abs(this.vel.y) * 1.5; // Stärker nach oben
+    // Teilchen befreien, wenn es steckengeblieben ist
+    if (this.steckenZähler > 15) {
+      this.vel = p5.Vector.random2D().mult(this.maxGeschwindigkeit);
+      this.vel.y = -abs(this.vel.y); // Immer nach oben
       this.steckenZähler = 0;
     }
-    
-    // Teilchen entfernen, wenn Lebensdauer abgelaufen
-    return this.lebensdauer > 0;
   }
 
   prüfeKollision() {
@@ -182,19 +176,19 @@ class Teilchen {
         // Die Geschwindigkeit in Richtung der Linie erhöhen
         // Dies hilft den Teilchen, entlang der Linien zu fließen
         let tangentialGeschw = p5.Vector.dot(this.vel, linienVektor);
-        let tangentialBoost = linienVektor.copy().mult(abs(tangentialGeschw) * 0.5); // Von 0.3 auf 0.5 erhöht
+        let tangentialBoost = linienVektor.copy().mult(abs(tangentialGeschw) * 0.3);
         this.vel.add(tangentialBoost);
         
-        // Nach oben tendieren - stärker
-        if (this.vel.y > 0 && random() < 0.8) { // Höhere Wahrscheinlichkeit (0.7 -> 0.8)
-          this.vel.y *= -0.9; // Stärkere Umkehr (-0.7 -> -0.9)
+        // Nach oben tendieren
+        if (this.vel.y > 0 && random() < 0.7) {
+          this.vel.y *= -0.7; // Hohe Chance auf Umkehr bei Abwärtsbewegung
         }
         
         this.abprallZähler++;
         
         // Wenn ein Teilchen zu oft abprallt, bekommt es einen stärkeren Auftriebs-Impuls
-        if (this.abprallZähler > 2) { // Reduziert von 3 auf 2
-          this.vel.add(createVector(0, -1.5)); // Verstärkt von -1.2 auf -1.5
+        if (this.abprallZähler > 3) {
+          this.vel.add(createVector(0, -1.2));
           this.abprallZähler = 0;
         }
         
@@ -202,9 +196,9 @@ class Teilchen {
       }
     }
     
-    // Häufiger nach oben ausrichten
-    if (!kollidiert && random() < 0.05) { // Erhöht von 0.02 auf 0.05
-      this.vel.y = mix(this.vel.y, -this.maxGeschwindigkeit, 0.4); // Stärker ausrichten (0.3 -> 0.4)
+    // Gelegentlich nach oben ausrichten, wenn keine Kollision stattfindet
+    if (!kollidiert && random() < 0.02) {
+      this.vel.y = mix(this.vel.y, -this.maxGeschwindigkeit * 0.8, 0.3);
     }
   }
 
