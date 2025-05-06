@@ -6,9 +6,9 @@ let abstosser = [];
 function setup() {
   createCanvas(300, 100);
   grundBild = createGraphics(width, height);
-  grundBild.background(155);
+  grundBild.background("white");
   grundBild.noFill();
-  grundBild.stroke(0);
+  grundBild.stroke("black"); // Ändern Sie hier den Wert für die Linienfarbe. z.B. grundBild.stroke("blue") oder grundBild.stroke(0, 0, 255) für Blau.
 
   let abstand = 15;
   let rauschSkala = 0.05;
