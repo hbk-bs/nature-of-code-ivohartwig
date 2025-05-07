@@ -10,8 +10,8 @@ function drawPattern() {
   stroke(0);             // Setzt die Linienfarbe auf Schwarz
 
   // --- STEUERPARAMETER FÜR LINIEN ---
-  let spacing = 15;      // Abstand zwischen den Hauptlinienbündeln
-  let noiseScale = 0.05; // Skalierungsfaktor für die Perlin-Noise-Verzerrung (beeinflusst die "Weichheit" der Kurven)
+  let spacing = 3;      // Abstand zwischen den Hauptlinienbündeln
+  let noiseScale = 1; // Skalierungsfaktor für die Perlin-Noise-Verzerrung (beeinflusst die "Weichheit" der Kurven)
 
   // --- HAUPTLINIEN ZEICHNEN ---
   // Diese Schleife iteriert von oben nach unten über die Zeichenfläche in 'spacing'-Schritten
