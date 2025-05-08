@@ -167,19 +167,29 @@ h4 {
   
     .image-container2{
       display: flex;
-      flex-direction:row;  
+      flex-direction: row;
       justify-content:space-evenly;
       flex-wrap: wrap;
       }
     
       .p5 {
         padding:10px;
-        height:auto;
+        height:393;
         border-radius: 20px;
         width: 300px
         }
+
+        .iframe-p5 {
+          padding: 10px;
+          border-radius: 20px;
+          width: 300px;
+          height: auto;
+          aspect-ratio: 3 / 2; /* falls nötig für saubere Darstellung */
+          border: none;
+          overflow: hidden;
+        }
   
-        .p5:hover {
+        .iframe-p5:hover {
           transform: scale(1.05);
           transform: scale(x, y);
           }
