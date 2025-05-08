@@ -1,56 +1,123 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>index</title>
-	<style>
-		/* Basic styles for readability */
-		body {
-			font-family: sans-serif;
-			max-width: 800px;
-			margin: 2em auto;
-			padding: 0 1em;
-			line-height: 1.6;
-		}
-		img { max-width: 100%; height: auto; }
-		pre { background-color: #f4f4f4; padding: 1em; overflow-x: auto; }
-		code { font-family: monospace; }
-	</style>
-</head>
-<body>
-	<!--
-You can add style tags and also script:src tags into markdown
-if you use https://marketplace.cursorapi.com/items?itemName=fmoronzirfas.markdown-to-html
-It will be included into your html file
-Just make sure to keep a line break between the markdown tags and the style/script tags
--->
-<style>
-html,
-body {
-height: 100%;
-}
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
-body {
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-}
-main {
-height: 100%;
-display: flex;
-justify-content: center;
-flex-direction: column;
-align-items: flex-end;
-}
-</style>
-<h1>hello world</h1>
-<main>
-<div id="sketch"></div>
-<script src="lib/p5.min.js"></script>
-<script src="index.js"></script>
-</main>
+		<title>{teachable machine}</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
 
-</body>
-</html>
+
+	<header>
+		<div class="header">
+		 <h1>- ARCHIV TEACHABLE MACHINE -</h1>
+		</div>
+
+		
+		<!--<section class="Navigation">
+			<ul>
+				<li><a href="#REFLECTION">REFLECTION</a></li>
+				<li><a href="#MENU">MENU</a></li>
+			</ul>
+		</section>-->
+
+		<a href="projects/test_rechner_3">
+		<section class="NAVWEB">
+			<h2 id="MENU" class="navtext">CALCULATOR</h2>
+		</section>
+		</a>
+	
+		<a href="projects/not_me">
+		<section class="NAVWEB">
+			<h2 id="MENU" class="navtext">NOT_ME</h2>
+		</section>
+		 </a>
+	
+		<a href="projects/mugshot">
+		<section class="NAVWEB">
+			<h2 id="MENU" class="navtext">MUGSHOT</h2>
+		</section>
+		</a>
+
+		<a href="">
+		<section class="NAVWEB2">
+		<h2 id="MENU" class="navtext"></h2>
+		</section>
+		</a>
+	
+		<a href="projects/test_audio_3">
+		<section class="NAVWEB">
+			<h2 id="MENU" class="navtext">MUSIC</h2>
+		</section>
+		</a>
+
+		<a href="">
+		<section class="NAVWEB2">
+		<h2 id="MENU" class="navtext"></h2>
+		</section>
+		</a>
+	
+		<a href="projects/start_stop">
+		<section class="NAVWEB">
+			<h2 id="MENU" class="navtext">START_STOP</h2>
+		</section>
+		</a>
+
+
+    </header>
+	  
+	<main>
+
+		<section class="THEMA">
+			
+			<div class="image-container2">
+			
+			<figure>
+			<img class="p5" src="https://hbk-bs.github.io/teachable-machine-ivohartwig/assets/bla.jpg">
+			<figcaption></figcaption>
+			</figure>
+
+			<figure>
+			<img class="p5" src="https://hbk-bs.github.io/teachable-machine-ivohartwig/assets/bla2.jpg">
+			<figcaption></figcaption>
+			</figure>
+
+	
+
+			
+
+			</div>
+		
+		</section>
+
+		
+		<section class="REFLECTION">
+			<div class="text">
+			<p>Teachable Machine Learning is an approach to machine learning that allows users without programming skills to train their own models – usually through a user-friendly interface like Google's Teachable Machine. For example, users can upload images, sounds, or poses to create an AI model that recognizes and classifies them.
+
+				In short:
+				Teachable Machine Learning makes it easy for anyone to create AI models by teaching the machine to recognize patterns from examples.</p>
+			<h4>IMAGE DETECTOR / IMAGE MODEL</h4>
+			<p>Calculator:<br>-Teachable Machine trained on digits<br>-Percentage indication of probability<br>-Program recognizes the digits held in front of the camera<br>-Function: Should be able to calculate using the operators</p>
+			<p>Not me:<br>-Pictures of me and pictures only of the background<br>- Percentage indication of probability</p>
+			<p>Mugshot:<br>-Use pictures of fellow students to build an AI model<br>-Pictures in front of a neutral background -> avoid disturbances<br>-Percentage indication of probability<br>-From a certain probability a gimmick</p>
+			<h4>AUDIO DETECTOR / AUDIO MODEL </h4>
+			<p>Music:<br> - Record start and stop from fellow students <br> - Different background noises to train the AI better on the words <br> - When start: song begins <br> - When stop: song stops</p>
+			<h4>MOTION DETECTOR / MOTION MODEL</h4>
+			<p>Start_Stop:<br> -Hands up: start <br> -Hands down: stop <br>-No function considered so far</p>
+			<h4>PROBLEMS</h4>
+			<p> - Teachable Machine Learning very inaccurate <br> - Many factors influence the accuracy <br> - Nice layout for the functions <br> - Uncertain which idea I want to pursue
+			</p>
+			<h4>ADITIONAL INFORMATION </h4>
+			<p>This is just a short summary – check out my website to learn more about my projects and experiences!</p>
+		    </div>
+	    </section>
+		
+    </main>
+
+	<footer class="footer">
+		<img class="me" src="https://hbk-bs.github.io/the-archives-ivohartwig/assets/images/Webbrille.png" alt="Webbrille">
+	</footer>
+	
