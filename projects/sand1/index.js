@@ -1,6 +1,6 @@
 function setup() {
   // --- GRUNDEINSTELLUNGEN ---
-  createCanvas(800, 800); // Erstellt eine Zeichenfläche von 300x300 Pixeln
+  createCanvas(300, 300); // Erstellt eine Zeichenfläche von 300x300 Pixeln
   drawPattern(); // Ruft die Funktion zum Zeichnen des Musters auf
 }
 
