@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{CODE ARDUINO}</title>
+</head>
+<body>
+	<style>
+:root {
+	/* CSS HSL */
+	--smoky-black: hsla(24, 14%, 7%, 1);
+	--cyclamen: hsla(341, 73%, 62%, 1);
+	--vista-blue: hsla(235, 44%, 50%, 1);
+	--baby-powder: hsl(0, 0%, 98%);
+	--jet: hsla(34, 7%, 19%, 1);
+
+	--background-color: var(--baby-powder);
+	--text-color: var(--smoky-black);
+	--text-color-light: hsl(from var(--text-color) h 0 99);
+	--dark-color: var(--jet);
+	--light-color: var(--baby-powder);
+	--highlight-color: var(--cyclamen);
+	--primary-color: var(--cyclamen);
+	--secondary-color: var(--vista-blue);
+	--code-background-color: hsl(60, 90%, 90%);
+
+	--link-color: hsl(from var(--primary-color) h s calc(l * 0.8));
+	--link-hover-color: var(--vista-blue);
+	--link-active-color: hsl(
+		from var(--primary-color) h calc(s * 1.2) calc(l * 0.8)
+	);
+	--link-visited-color: hsl(from var(--link-color) h s calc(l * 0.8));
+
+	/* sizes */
+	--s1: 8px;
+	--s2: 16px;
+	--s3: 32px;
+	--s4: 64px;
+	--s5: 128px;
+	--s6: 256px;
+	--s7: 512px;
+
+	--max-width: 70ch;
+	--s8: 1024px;
+	--s9: 2048px;
+	--s10: 4096px;
+}
+		pre {
+	font-weight: normal;
+	line-height: 1.5;
+	padding: var(--s1);
+	border-left: var(--s1) solid var(--code-background-color);
+	background-color: white;
+	margin-bottom: var(--s2);
+}
+
+pre,
+code {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	tab-size: 2;
+}
+
+code {
+	font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
+		"DejaVu Sans Mono", monospace;
+	font-size: 0.89em;
+	background-color: var(--code-background-color);
+}
+pre > code {
+	background-color: transparent;
+}
+	</style>
+	<pre>
+		<code>
+
+			
+
+				function setup() {
+					// --- GRUNDEINSTELLUNGEN ---
+					createCanvas(800, 800); // Erstellt eine Zeichenfläche von 300x300 Pixeln
+					drawPattern(); // Ruft die Funktion zum Zeichnen des Musters auf
+				  }
+				  
+				  function drawPattern() {
+					noiseSeed(millis()); // Ändert den Seed für die Noise-Funktion bei jedem Aufruf
+					background(255);       // Setzt die Hintergrundfarbe auf Weiß
+					noFill();              // Deaktiviert das Füllen von Formen (Linien werden nicht gefüllt)
+					stroke(0);             // Setzt die Linienfarbe auf Schwarz
+				  
+					// --- STEUERPARAMETER FÜR LINIEN ---
+					let spacing = 15;      // Abstand zwischen den Hauptlinienbündeln
+					let noiseScale = 0.05; // Skalierungsfaktor für die Perlin-Noise-Verzerrung (beeinflusst die "Weichheit" der Kurven)
+				  
+					// --- HAUPTLINIEN ZEICHNEN ---
+					// Diese Schleife iteriert von oben nach unten über die Zeichenfläche in 'spacing'-Schritten
+					for (let y = 0; y < height; y += spacing) {
+					  let isDrawing = false; // Zustand, ob aktuell eine Linie gezeichnet wird
+					  // Diese innere Schleife iteriert von links nach rechts über die Zeichenfläche in kleinen Schritten
+					  for (let x = 0; x <= width; x += 5) { // Kleinere Schritte für feinere Liniensegmente
+						// Berechnet einen Versatz basierend auf Perlin Noise, um eine organische Wellenform zu erzeugen
+						let offset = noise(x * noiseScale, y * noiseScale) * 20; // Die '20' skaliert die Stärke des Versatzes
+						if (random(1) > 0.1) { // 90% Wahrscheinlichkeit, das aktuelle Liniensegment weiterzuzeichnen
+						  if (!isDrawing) {    // Wenn noch keine Linie gezeichnet wird...
+							beginShape();      // ...starte eine neue Form (Linie)
+							isDrawing = true;  // Merke, dass jetzt gezeichnet wird
+						  }
+						  curveVertex(x, y + offset); // Füge einen Punkt zur geschwungenen Linie hinzu
+						} else if (isDrawing) { // Wenn mit 10% Wahrscheinlichkeit unterbrochen wird UND gerade gezeichnet wird...
+						  endShape();          // ...beende die aktuelle Linie
+						  isDrawing = false;   // Merke, dass nicht mehr gezeichnet wird
+						}
+					  }
+					  if (isDrawing) endShape(); // Stelle sicher, dass eine am Rand begonnene Linie auch beendet wird
+					}
+				  
+					// --- ZWISCHENVERBINDUNGEN ZEICHNEN ---
+					// Diese Schleife iteriert versetzt zu den Hauptlinien von oben nach unten
+					// Ziel ist es, Verbindungen oder Überlappungen zwischen den Hauptlinienbündeln zu erzeugen
+					for (let y = spacing / 2; y < height; y += spacing) { // Startet bei der Hälfte des 'spacing' für den Versatz
+					  let isDrawing = false; // Zustand, ob aktuell eine Verbindungslinie gezeichnet wird
+					  // Diese innere Schleife iteriert wieder von links nach rechts
+					  for (let x = 0; x <= width; x += 5) {
+						// Erneute Berechnung eines Versatzes für die Verbindungslinien
+						let offset = noise(x * noiseScale, y * noiseScale) * 20;
+						if (random(1) > 0.1) { // 90% Wahrscheinlichkeit, weiterzuzeichnen
+						  if (!isDrawing) {
+							beginShape();
+							isDrawing = true;
+						  }
+						  curveVertex(x, y + offset); // Füge Punkt zur Verbindungslinie hinzu
+						} else if (isDrawing) {
+						  endShape();
+						  isDrawing = false;
+						}
+					  }
+					  if (isDrawing) endShape(); // Beende die Linie, falls sie noch offen ist
+					}
+				  }
+				  
+				  function mousePressed() {
+					drawPattern(); // Zeichnet das Muster neu, wenn die Maus geklickt wird
+				  }
+				  
+
+			
+		</code>
+	</pre>
+</body>
+</html>
