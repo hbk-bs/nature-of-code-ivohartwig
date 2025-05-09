@@ -146,18 +146,16 @@ h4 {
 }
   
   
-  .REFLECTION {
+  .INFO {
 	background-color: #515251;
 	margin:15px;
+  margin-top:60px;
 	padding: 10px;
 	border-radius: 10px;
   color:white
   }
 
-  .REFLECTION p {
-   color:white;
-   margin:20px ;
-   }
+  
 
    .THEMA {
     margin:15px;
@@ -189,7 +187,7 @@ h4 {
           overflow: hidden;
         }
   
-        .iframe-p5:hover {
+        .p5:hover {
           transform: scale(1.05);
           transform: scale(x, y);
           }
