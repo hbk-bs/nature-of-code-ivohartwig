@@ -127,6 +127,10 @@
     color:white;
   }
 
+  h3:hover {
+    text-decoration: underline;
+  }
+
   .text {
     text-align: left;
     max-width: 800px; /* Begrenzung der Breite */
@@ -193,16 +197,13 @@ h4 {
           overflow: hidden;
         }
   
-        .p5:hover {
-          transform: scale(1.05);
-          transform: scale(x, y);
-          }
-  
         figcaption { 
           text-align:center;
           color:black;
           margin-bottom:15px;
           }
+
+          
   
   /* main style ends */
   
