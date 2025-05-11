@@ -153,16 +153,36 @@ h4 {
   margin-top: 30px;
   font-style: italic;
 }
+
+h5 {
+  margin-left: 20px;
+  margin-top: 30px;
+  font-style: italic;
+}
+  
   
   
   .INFO {
 	background-color: #515251;
 	margin:15px;
-  margin-top:60px;
+  margin-top:15px;
 	padding: 10px;
 	border-radius: 10px;
   color:white
   }
+
+  .REFLECTION {
+    background-color: #515251;
+    margin:15px;
+    padding: 10px;
+    border-radius: 10px;
+    color:white
+    }
+
+    .REFLECTION p {
+      color:white;
+      margin:20px ;
+      }
 
   
 

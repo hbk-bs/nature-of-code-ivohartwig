@@ -7,6 +7,16 @@
 
 		<title>{nature of code}</title>
 		<link rel="stylesheet" href="style.css" />
+		<style>
+			/* Custom styling for links */
+			section.INFO a, section.REFLECTION a {
+				color: inherit; /* Uses the parent text color */
+				text-decoration: none; /* Removes the underline */
+			}
+			section.INFO a:hover, section.REFLECTION a:hover {
+				text-decoration: underline; /* Optional: adds underline on hover */
+			}
+		</style>
 	</head>
 
 
@@ -21,12 +31,57 @@
 		</section>
 		</a>
 
+		<a href="#STRUCTURES">
+		<section class="NAVWEB">
+			<h2 id="MENU" class="navtext">STRUCTURES</h2>
+		</section>
+		</a>
+
+		<a href="#PARTICLE">
+		<section class="NAVWEB">
+			<h2 id="MENU" class="navtext">PARTICLE SYSTEMS</h2>
+		</section>
+		</a>
+
 
     </header>
 	  
 	<main>
 
-		<section class="INFO">
+		<section class="REFLECTION">
+		<h3>REFLECTION</h3>
+		<div class="text">
+			<h4>RESEARCHING</h4>
+			<h4>STRUCTURES</h4>
+			<a href="#STRUCTURES"><h5>SAND1</h5></a>
+			<p>let spacing = 15;  
+		    </br>
+			let noiseScale = 0.05;</p>
+			<a href="#SAND2"><h5>SAND2</h5></a>
+			<p>let spacing = 3;  
+		    </br>
+			let noiseScale = 0.05;</p>
+			<a href="#SAND3"><h5>SAND3</h5></a>
+			<p>let spacing = 3;  
+		    </br>
+			let noiseScale = 1;</p>
+			<a href="#SAND4"><h5>SAND4</h5></a>
+			<p>let spacing = 4;  
+		    </br>
+			let noiseScale = 0.02;</p>
+			<a href="#SAND5"><h5>SAND5</h5></a>
+			<p>let spacing = 4;  
+		    </br>
+			let noiseScale = 0.02;
+			<br>
+			NO SECOND LOOP FOR CONNECTING LINES
+			<br>
+			NO INTERRUPTIONS IN THE LINES </p>
+			<a href="#PARTICLE"><h4>PARTICLE SYSTEM / WATER </h4></a>
+		</div>
+		</section>
+
+		<section class="INFO" id="STRUCTURES">
 			<a href="https://hbk-bs.github.io/nature-of-code-ivohartwig/projects/sand1/"><h3>SAND 1</h3></a>
 		<div class="text">
 			let spacing = 15;  
@@ -57,7 +112,7 @@
 		</section>
 
 
-		<section class="INFO">
+		<section class="INFO" id="SAND2">
 			<a href="https://hbk-bs.github.io/nature-of-code-ivohartwig/projects/sand2/"><h3>SAND 2</h3></a>
 		<div class="text">
 			let spacing = 3;  
@@ -89,7 +144,7 @@
 		</section>
 
 
-		<section class="INFO">
+		<section class="INFO" id="SAND3">
 		    <a href="https://hbk-bs.github.io/nature-of-code-ivohartwig/projects/sand3/"><h3>SAND 3</h3></a>
 		<div class="text">
 			let spacing = 3;  
@@ -121,7 +176,7 @@
 		</section>
 
 
-		<section class="INFO">
+		<section class="INFO" id="SAND4">
 		    <a href="https://hbk-bs.github.io/nature-of-code-ivohartwig/projects/sand4/"><h3>SAND 4</h3></a>
 		<div class="text">
 			let spacing = 4;  
@@ -153,7 +208,7 @@
 		</section>
 
 
-		<section class="INFO">
+		<section class="INFO" id="SAND5">
 			<a href="https://hbk-bs.github.io/nature-of-code-ivohartwig/projects/sand5/"><h3>SAND 5</h3></a>
 		<div class="text">
 			let spacing = 4;  
@@ -191,7 +246,7 @@
 		</section>
 
 
-		<section class="INFO">
+		<section class="INFO" id="PARTICLE">
 			<a href="https://hbk-bs.github.io/nature-of-code-ivohartwig/projects/ebbe_flut_2_repeller_2/"><h3>PARTICLE SYSTEM / WATER</h3></a>
 		<div class="text">
 		</div>
@@ -218,4 +273,3 @@
 	<footer class="footer">
 		<img class="me" src="https://hbk-bs.github.io/the-archives-ivohartwig/assets/images/Webbrille.png" alt="Webbrille">
 	</footer>
-	
