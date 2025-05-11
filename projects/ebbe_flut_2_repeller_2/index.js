@@ -4,7 +4,7 @@ let linien = [];
 let abstosser = [];
 
 function setup() {
-  createCanvas(300, 100);
+  createCanvas(300, 300);
   grundBild = createGraphics(width, height);
   grundBild.background("white");
   grundBild.noFill();

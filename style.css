@@ -122,6 +122,11 @@
 	color:white;
   }
 
+  h3 {
+    text-align:center;
+    color:white;
+  }
+
   .text {
     text-align: left;
     max-width: 800px; /* Begrenzung der Breite */
@@ -165,7 +170,7 @@ h4 {
   
     .image-container2{
       display: flex;
-      flex-direction: row;
+      flex-direction:column;
       align-items: center;
       justify-content: center;  
       flex-wrap: wrap;
