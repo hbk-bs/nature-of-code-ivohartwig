@@ -16,7 +16,7 @@ In the first step, my goal was to translate the visual properties of the beach's
 ## *Particle System / Water* 
 But how do these different structures come into being? Through my observations, I noticed that they all share one thing in common: they are formed by the constant movement of water. In some cases, water flows through the structures, following the path of least resistance; in others, it deposits more and more sand, which accumulates over time. To translate not only the visual but also the physical properties, I used a particle system to simulate water flowing over sand, generating these structures.
 
-### [Water Immitation ](https://hbk-bs.github.io/nature-of-code-ivohartwig/projects/ebbe_flut_2_repeller_2/)
+### [Water Immitation ](https://hbk-bs.github.io/nature-of-code-ivohartwig/projects/ebbe_flut_2_repeller_2.2/)
 
 ## *Problems*
 
