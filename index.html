@@ -11,7 +11,7 @@
 			/* Custom styling for links */
 			section.INFO a, section.REFLECTION a {
 				color: inherit; /* Uses the parent text color */
-				text-decoration: none; /* Removes the underline */
+				text-decoration: underline; /* Removes the underline */
 			}
 			/* Apply hover effect only to links that are not direct h3 children */
 			section.INFO a:not(h3):hover, section.REFLECTION a:not(h3):hover {
@@ -69,29 +69,18 @@
 				On the first evening, I walked across the dunes to the sea. Once I had climbed over the sand hill, the endless beach and mudflats stretched out before me. I was forced to walk a long way to reach the water. Along the way, I immediately noticed something: how many different kinds of structures the beach can have.</p>
 			<h4>STRUCTURES</h4>
 			<p>In the first step, my goal was to translate the visual properties of the beach's structures into code. I quickly realized that these structures can be distinguished by two rather subtle characteristics: the spacing between the lines and the way the lines themselves flow – whether they are more straight or wavy.
-				In my code, these properties can be adjusted using the variables let spacing and let noiseScale. Here, let spacing defines the distance between the lines, and let noiseScale describes their flow.</p>
+				In my code, these properties can be adjusted using the variables <code>let spacing</code> and <code>let noiseScale</code>. Here, <code>let spacing</code> defines the distance between the lines, and <code>let noiseScale</code> describes their flow.</p>
 			<a href="#STRUCTURES"><h5>SAND1</h5></a>
-			<p>let spacing = 15;  
-		    </br>
-			let noiseScale = 0.05;</p>
+			<pre><code>let spacing = 15; <br>let noiseScale = 0.05; </code></pre>
 			<a href="#SAND2"><h5>SAND2</h5></a>
-			<p>let spacing = 3;  
-		    </br>
-			let noiseScale = 0.05;</p>
+			<pre><code>let spacing = 3; <br>let noiseScale = 0.05;</code></pre>
 			<a href="#SAND3"><h5>SAND3</h5></a>
-			<p>let spacing = 3;  
-		    </br>
-			let noiseScale = 1;</p>
+			<pre><code>let spacing = 3; <br>let noiseScale = 1;</code></pre>
 			<a href="#SAND4"><h5>SAND4</h5></a>
-			<p>let spacing = 4;  
-		    </br>
-			let noiseScale = 0.02;</p>
+			<pre><code>let spacing = 4; <br>let noiseScale = 0.02;</code></pre>
 			<a href="#SAND5"><h5>SAND5</h5></a>
-			<p>let spacing = 4;  
-		    </br>
-			let noiseScale = 0.02;
-			<br>
-			NO SECOND LOOP FOR CONNECTING LINES
+            <pre><code>let spacing = 4;  <br>let noiseScale = 0.02;</code></pre>
+			<p>NO SECOND LOOP FOR CONNECTING LINES
 			<br>
 			NO INTERRUPTIONS IN THE LINES </p>
 			<a href="#PARTICLE"><h4>PARTICLE SYSTEM / WATER </h4></a>
