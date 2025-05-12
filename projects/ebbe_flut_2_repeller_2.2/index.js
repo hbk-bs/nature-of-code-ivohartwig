@@ -4,11 +4,11 @@ let linien = [];
 let abstosser = [];
 
 function setup() {
-  createCanvas(300, 300);
+  createCanvas(300, 300); // Kleinere Canvas zum Testen, bei Bedarf anpassen
   grundBild = createGraphics(width, height);
   grundBild.background("white");
   grundBild.noFill();
-  grundBild.stroke("black"); // Ändern Sie hier den Wert für die Linienfarbe. z.B. grundBild.stroke("blue") oder grundBild.stroke(0, 0, 255) für Blau.
+  grundBild.stroke("black"); // Linienfarbe
 
   let abstand = 15;
   let rauschSkala = 0.05;
@@ -18,7 +18,6 @@ function setup() {
   for (let y = 0; y < height; y += abstand) {
     zeichneMusterLinie(y, rauschSkala, überstand);
   }
-
   for (let y = abstand / 2; y < height; y += abstand) {
     zeichneMusterLinie(y, rauschSkala, überstand);
   }
@@ -34,8 +33,8 @@ function zeichneMusterLinie(y, rauschSkala, überstand) {
   let zeichnet = false;
 
   for (let x = -überstand; x <= width + überstand; x += 5) {
-    let versatz = noise(x * rauschSkala, y * rauschSkala) * 20;
-    if (random(1) > 0.1) {
+    let versatz = noise(x * rauschSkala, y * rauschSkala) * 20; // Amplitude des Rauschens
+    if (random(1) > 0.1) { // Wahrscheinlichkeit für Lücken in den Linien
       if (!zeichnet) {
         grundBild.beginShape();
         linienpunkte = [];
@@ -64,11 +63,11 @@ function draw() {
   image(grundBild, 0, 0);
 
   for (let t of teilchen) {
-    // Auftrieb verstärken, aber weniger stark für langsamere Bewegung
-    t.wendeKraftAn(createVector(0, -0.1));  // Schwächerer Auftrieb für langsamere Bewegung
-    
-    // Leichte seitliche Zufallskraft
-    let seitlicheKraft = createVector(random(-0.05, 0.05), 0); 
+    // Auftrieb nochmals verstärken <--- *** Änderung hier ***
+    t.wendeKraftAn(createVector(0, -0.25));  // Deutlich stärkerer Auftrieb
+
+    // Leichte seitliche Zufallskraft (kann optional reduziert oder entfernt werden)
+    let seitlicheKraft = createVector(random(-0.05, 0.05), 0);
     t.wendeKraftAn(seitlicheKraft);
 
     // Abstosser-Kräfte
@@ -77,26 +76,30 @@ function draw() {
     }
   }
 
+  // Teilchen aktualisieren, prüfen und anzeigen
   for (let i = teilchen.length - 1; i >= 0; i--) {
     let t = teilchen[i];
-    t.aktualisiere();
+    let lebtNoch = t.aktualisiere();
+    if (!lebtNoch) {
+        teilchen.splice(i, 1);
+        continue;
+    }
+
     t.prüfeKollision();
     t.zeige();
 
+    // Entfernen, wenn außerhalb des Canvas (wichtig für oben!)
     if (t.pos.y < 0 || t.pos.y > height || t.pos.x < 0 || t.pos.x > width) {
       teilchen.splice(i, 1);
     }
   }
 
-  // Neue Teilchen - Beispiel für viele Teilchen
-  for (let x = 0; x < width; x += 5) {   // Engere Abstände (5 statt 10)
-    if (random(1) < 0.1) {               // Höhere Wahrscheinlichkeit (10% statt 5%)
+  // Neue Teilchen generieren (ggf. Rate anpassen)
+  for (let x = 0; x < width; x += 5) { // Erzeugt relativ viele Teilchen
+    if (random(1) < 0.1) { // 10% Chance pro Position
       teilchen.push(new Teilchen(x, height - 1));
     }
   }
-
-  // Abstosser anzeigen (optional)
-  // for (let a of abstosser) a.zeige();
 }
 
 function speichereLinie(punkte) {
@@ -113,14 +116,17 @@ function speichereLinie(punkte) {
 class Teilchen {
   constructor(x, y) {
     this.pos = createVector(x, y);
-    this.vel = createVector(random(-0.3, 0.3), -1.0); // Mehr Aufwärtsgeschwindigkeit am Start
+    // Evtl. höhere Startgeschwindigkeit nach oben
+    this.vel = createVector(random(-0.3, 0.3), -1.5);
     this.acc = createVector(0, 0);
     this.radius = 1.5;
-    this.maxGeschwindigkeit = 3.0; // Von 2.5 auf 3.0 erhöht für schnelleres Durchfließen
+    // Maximalgeschwindigkeit weiter erhöhen <--- *** Änderung hier ***
+    this.maxGeschwindigkeit = 5.0;
     this.abprallZähler = 0;
     this.steckenZähler = 0;
     this.letztePos = createVector(x, y);
-    this.lebensdauer = random(300, 600); // Lebensdauer hinzufügen, falls Teilchen trotzdem steckenbleiben
+    // Lebensdauer weiter erhöhen <--- *** Änderung hier ***
+    this.lebensdauer = random(800, 1200); // Längere Zeit zum Erreichen des Ziels
   }
 
   wendeKraftAn(kraft) {
@@ -131,30 +137,26 @@ class Teilchen {
     this.lebensdauer--;
     this.vel.add(this.acc);
     this.vel.limit(this.maxGeschwindigkeit);
-    
-    // Position für Steckenbleib-Prüfung speichern
+
     this.letztePos.set(this.pos.x, this.pos.y);
-    
     this.pos.add(this.vel);
     this.acc.mult(0);
-    
-    // Prüfen ob Teilchen steckengeblieben ist - empfindlicher reagieren
+
+    // Steckenbleib-Erkennung (kann ggf. aggressiver werden)
     let bewegungsDist = dist(this.pos.x, this.pos.y, this.letztePos.x, this.letztePos.y);
-    if (bewegungsDist < 0.3) { // Erhöht von 0.2 auf 0.3 für frühere Erkennung
+    if (bewegungsDist < 0.3 && this.vel.mag() < 1.0) { // Nur zählen, wenn wirklich langsam
       this.steckenZähler++;
     } else {
       this.steckenZähler = 0;
     }
-    
-    // Teilchen schneller befreien
-    if (this.steckenZähler > 10) { // Reduziert von 15 auf 10
-      // Stärkere Befreiungsbewegung
-      this.vel = p5.Vector.random2D().mult(this.maxGeschwindigkeit * 1.2);
-      this.vel.y = -abs(this.vel.y) * 1.5; // Stärker nach oben
+
+    // Schneller befreien
+    if (this.steckenZähler > 8) { // Früher eingreifen (war 10)
+      this.vel = p5.Vector.random2D().mult(this.maxGeschwindigkeit * 1.5); // Stärkerer Boost
+      this.vel.y = -abs(this.vel.y) * 2.0; // Sehr stark nach oben
       this.steckenZähler = 0;
     }
-    
-    // Teilchen entfernen, wenn Lebensdauer abgelaufen
+
     return this.lebensdauer > 0;
   }
 
@@ -163,52 +165,55 @@ class Teilchen {
     for (let linie of linien) {
       if (this.linienKollision(linie)) {
         kollidiert = true;
-        
-        // Tangentialvektor der Linie berechnen
-        let linienVektor = createVector(linie.x2 - linie.x1, linie.y2 - linie.y1).normalize();
-        
-        // Normalen-Vektor (senkrecht zur Linie)
+
+        let linienVektor = createVector(linie.x2 - linie.x1, linie.y2 - linie.y1);
+        // Prüfe, ob Linie eine nennenswerte Länge hat, um Division durch Null zu vermeiden
+        if (linienVektor.magSq() < 0.01) continue; // Überspringe sehr kurze Liniensegmente
+        linienVektor.normalize();
+
         let normalenVektor = createVector(-linienVektor.y, linienVektor.x);
-        
-        // Reflexion mit mehr Betonung auf die Bewegung entlang der Linie
         let reflexion = this.reflexion(this.vel, normalenVektor);
-        
-        // Zurücksetzen, um Eindringen zu vermeiden
-        this.pos.sub(this.vel.copy().mult(1.1));
-        
-        // Neue Geschwindigkeit setzen
-        this.vel = reflexion.mult(0.9);
-        
-        // Die Geschwindigkeit in Richtung der Linie erhöhen
-        // Dies hilft den Teilchen, entlang der Linien zu fließen
-        let tangentialGeschw = p5.Vector.dot(this.vel, linienVektor);
-        let tangentialBoost = linienVektor.copy().mult(abs(tangentialGeschw) * 0.5); // Von 0.3 auf 0.5 erhöht
-        this.vel.add(tangentialBoost);
-        
-        // Nach oben tendieren - stärker
-        if (this.vel.y > 0 && random() < 0.8) { // Höhere Wahrscheinlichkeit (0.7 -> 0.8)
-          this.vel.y *= -0.9; // Stärkere Umkehr (-0.7 -> -0.9)
+
+        // Zurücksetzen, um Eindringen zu vermeiden (etwas stärker)
+        this.pos.sub(this.vel.copy().mult(1.2));
+
+        // Keine Dämpfung bei Reflexion <--- *** Änderung hier ***
+        this.vel = reflexion.mult(1.0);
+
+        // Intelligenter Tangential-Boost <--- *** Änderung hier ***
+        // Nur anwenden, wenn Linie nach oben zeigt (y2 ist kleiner als y1)
+        if (linie.y2 < linie.y1) {
+            let tangentialGeschw = p5.Vector.dot(this.vel, linienVektor);
+            // Stärkerer Boost entlang der Linie
+            let tangentialBoost = linienVektor.copy().mult(abs(tangentialGeschw) * 0.7); // War 0.5
+            this.vel.add(tangentialBoost);
         }
-        
+
+        // Nach Kollision: Sicherstellen, dass die Y-Geschwindigkeit negativ ist <--- *** Änderung hier ***
+        // Multiplizieren mit < 1, um nicht *zu* extrem zu werden, aber Richtung erzwingen
+        this.vel.y = -abs(this.vel.y) * 0.8;
+
+        // Stärkerer Impuls bei wiederholten Kollisionen
         this.abprallZähler++;
-        
-        // Wenn ein Teilchen zu oft abprallt, bekommt es einen stärkeren Auftriebs-Impuls
-        if (this.abprallZähler > 2) { // Reduziert von 3 auf 2
-          this.vel.add(createVector(0, -1.5)); // Verstärkt von -1.2 auf -1.5
+        if (this.abprallZähler > 1) { // Früher (war 2)
+          this.vel.add(createVector(0, -2.0)); // Stärker (war -1.5)
           this.abprallZähler = 0;
         }
-        
-        break;
+
+        // Geschwindigkeit nach all den Änderungen begrenzen
+        this.vel.limit(this.maxGeschwindigkeit);
+
+        break; // Nur eine Kollision pro Frame
       }
     }
-    
-    // Häufiger nach oben ausrichten
-    if (!kollidiert && random() < 0.05) { // Erhöht von 0.02 auf 0.05
-      this.vel.y = mix(this.vel.y, -this.maxGeschwindigkeit, 0.4); // Stärker ausrichten (0.3 -> 0.4)
+
+    // Aggressivere Ausrichtung nach oben, wenn keine Kollision
+    if (!kollidiert && random() < 0.1) { // Häufiger (war 0.05)
+      // Stärker zur maximalen Aufwärtsgeschwindigkeit interpolieren
+      this.vel.y = mix(this.vel.y, -this.maxGeschwindigkeit, 0.6); // War 0.4
     }
   }
 
-  // Reflexionsvektor berechnen
   reflexion(einfallsvektor, normalenvektor) {
     let dot = einfallsvektor.x * normalenvektor.x + einfallsvektor.y * normalenvektor.y;
     return createVector(
@@ -219,20 +224,23 @@ class Teilchen {
 
   linienKollision(linie) {
     let x1 = linie.x1, y1 = linie.y1, x2 = linie.x2, y2 = linie.y2;
-    let länge = dist(x1, y1, x2, y2);
-    if (länge === 0) return false;
+    let längeSq = (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1); // Quadrat der Länge ist effizienter
+    if (längeSq < 0.01) return false; // Zu kurz
 
-    let t = ((this.pos.x - x1) * (x2 - x1) + (this.pos.y - y1) * (y2 - y1)) / (länge * länge);
+    let t = ((this.pos.x - x1) * (x2 - x1) + (this.pos.y - y1) * (y2 - y1)) / längeSq;
     t = constrain(t, 0, 1);
 
     let nächsterX = x1 + t * (x2 - x1);
     let nächsterY = y1 + t * (y2 - y1);
-    let d = dist(this.pos.x, this.pos.y, nächsterX, nächsterY);
-    return d < this.radius + 1;
+    // Distanzquadrat prüfen ist effizienter als dist()
+    let abstandSq = (this.pos.x - nächsterX)*(this.pos.x - nächsterX) + (this.pos.y - nächsterY)*(this.pos.y - nächsterY);
+    let kollisionsRadiusSq = (this.radius + 0.5) * (this.radius + 0.5); // Kleinerer Puffer
+
+    return abstandSq < kollisionsRadiusSq;
   }
 
   zeige() {
-    stroke(0, 100, 255);
+    stroke(0, 100, 255, 200); // Etwas Transparenz hinzufügen
     strokeWeight(2);
     point(this.pos.x, this.pos.y);
   }
@@ -241,15 +249,16 @@ class Teilchen {
 class Abstosser {
   constructor(x, y) {
     this.position = createVector(x, y);
-    this.stärke = 300;
+    this.stärke = 350; // Leicht erhöht
   }
 
   stoßeAb(teilchen) {
     let richtung = p5.Vector.sub(teilchen.pos, this.position);
-    let d = richtung.mag();
-    d = constrain(d, 10, 100);
+    let dSq = richtung.magSq(); // Distanzquadrat ist effizienter
+    dSq = constrain(dSq, 100, 10000); // Entspricht d=10 bis d=100
+    let stärkeFaktor = this.stärke / dSq; // Kraft = Stärke / d^2
     richtung.normalize();
-    let kraft = richtung.mult(this.stärke / (d * d));
+    let kraft = richtung.mult(stärkeFaktor);
     return kraft;
   }
 
@@ -260,7 +269,6 @@ class Abstosser {
   }
 }
 
-// Hilfsfunktion zur Interpolation von Werten
 function mix(a, b, t) {
   return a * (1 - t) + b * t;
 }
