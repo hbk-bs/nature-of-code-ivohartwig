@@ -272,3 +272,36 @@ class Abstosser {
 function mix(a, b, t) {
   return a * (1 - t) + b * t;
 }
+
+function mousePressed() {
+  // Clear existing particles
+  teilchen = [];
+  
+  // Reset background and lines
+  linien = [];
+  grundBild = createGraphics(width, height);
+  grundBild.background("white");
+  grundBild.noFill();
+  grundBild.stroke("white"); // Linienfarbe
+  
+  let abstand = 15;
+  let rauschSkala = 0.05;
+  let überstand = 50;
+  
+  // Regenerate background lines
+  for (let y = 0; y < height; y += abstand) {
+    zeichneMusterLinie(y, rauschSkala, überstand);
+  }
+  for (let y = abstand / 2; y < height; y += abstand) {
+    zeichneMusterLinie(y, rauschSkala, überstand);
+  }
+  
+  // Clear and regenerate repellers
+  abstosser = [];
+  for (let x = 0; x <= width; x += 40) {
+    abstosser.push(new Abstosser(x, height - 5));
+  }
+  
+  // Optional: Add some feedback that the simulation was reset
+  console.log("Simulation reset");
+}
