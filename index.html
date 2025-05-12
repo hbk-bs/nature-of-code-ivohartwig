@@ -99,6 +99,12 @@
 				Through my observations, I noticed that they all share one thing in common: they are formed by the constant movement of water.
 				In some cases, water flows through the structures, following the path of least resistance; in others, it deposits more and more sand, which accumulates over time.
 				To translate not only the visual but also the physical properties, I used a particle system to simulate water flowing over sand, generating these structures.</p>
+				
+				<p>The particles in this simulation represent water droplets that rise due to a strong upward buoyant force. Their movement is controlled by a maximum speed, ensuring realistic dynamics. The particles have a lifespan, which determines how long they stay active before being removed from the system.
+
+					When colliding with the background lines, which act as barriers, the particles are reflected, with their velocity being adjusted for a realistic response. If the line is slanted upwards, the particles also receive a tangential boost, enhancing their movement along the line. If a particle becomes nearly stationary due to low velocity, a release force is applied to get it moving again.
+					
+					The particles randomly respond to their environment, mimicking the chaotic and unpredictable behavior of water droplets. Overall, the simulation creates a dynamic and realistic representation of how water droplets interact with various forces.</p>
 		</div>
 		</section>
 
