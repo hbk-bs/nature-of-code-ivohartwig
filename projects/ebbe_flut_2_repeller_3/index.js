@@ -25,7 +25,7 @@ function setup() {
 
   // Abstosser am unteren Rand
   for (let x = 0; x <= width; x += 40) {
-    abstosser.push(new Abstosser(x, height - 5));
+    abstosser.push(new Abstosser(x, height - 10)); // Position leicht erhöht für früheren Effekt
   }
 }
 
@@ -64,8 +64,8 @@ function draw() {
   image(grundBild, 0, 0);
 
   for (let t of teilchen) {
-    // Auftrieb verstärken, aber weniger stark für langsamere Bewegung
-    t.wendeKraftAn(createVector(0, -0.1));  // Schwächerer Auftrieb für langsamere Bewegung
+    // Auftrieb verstärken
+    t.wendeKraftAn(createVector(0, -0.15));  // Stärkerer Auftrieb (war -0.1 bzw. -0.12)
     
     // Leichte seitliche Zufallskraft
     let seitlicheKraft = createVector(random(-0.05, 0.05), 0); 
@@ -79,19 +79,27 @@ function draw() {
 
   for (let i = teilchen.length - 1; i >= 0; i--) {
     let t = teilchen[i];
-    t.aktualisiere();
+    let aktiv = t.aktualisiere(); // aktualisiere gibt false zurück, wenn Lebensdauer abgelaufen
     t.prüfeKollision();
     t.zeige();
 
-    if (t.pos.y < 0 || t.pos.y > height || t.pos.x < 0 || t.pos.x > width) {
-      teilchen.splice(i, 1);
+    // Partikel zurücksetzen statt entfernen, wenn sie den Bildschirm verlassen oder ihre Lebensdauer abgelaufen ist
+    if (!aktiv || t.pos.y < -10 || t.pos.y > height + 10 || t.pos.x < -10 || t.pos.x > width + 10) {
+      // Partikel am unteren Rand mit neuer Energie neu initialisieren
+      t.pos.set(random(width), height - 1);
+      t.vel.set(random(-0.5, 0.5), random(-2.0, -3.0)); // Stärkere und variablere Startgeschwindigkeit nach oben
+      t.acc.mult(0);
+      t.abprallZähler = 0;
+      t.steckenZähler = 0;
+      t.lebensdauer = random(500, 800); // Angepasste Lebensdauer
     }
   }
 
-  // Neue Teilchen - Beispiel für viele Teilchen
-  for (let x = 0; x < width; x += 5) {   // Engere Abstände (5 statt 10)
-    if (random(1) < 0.1) {               // Höhere Wahrscheinlichkeit (10% statt 5%)
-      teilchen.push(new Teilchen(x, height - 1));
+  // Neue Teilchen - seltener und weniger, da Recycling die Hauptarbeit macht
+  // Stellt sicher, dass die Partikelanzahl nicht zu stark sinkt.
+  if (frameCount % 10 === 0) { // Seltener neue Teilchen erzeugen
+    if (random(1) < 0.1 && teilchen.length < 280) { // Geringere Wahrscheinlichkeit, Obergrenze leicht angepasst
+      teilchen.push(new Teilchen(random(width), height - 1));
     }
   }
 
@@ -113,14 +121,14 @@ function speichereLinie(punkte) {
 class Teilchen {
   constructor(x, y) {
     this.pos = createVector(x, y);
-    this.vel = createVector(random(-0.3, 0.3), -1.0); // Mehr Aufwärtsgeschwindigkeit am Start
+    this.vel = createVector(random(-0.5, 0.5), random(-2.0, -3.0)); // Stärkere und variablere Aufwärtsgeschwindigkeit am Start
     this.acc = createVector(0, 0);
     this.radius = 1.5;
-    this.maxGeschwindigkeit = 3.0; // Von 2.5 auf 3.0 erhöht für schnelleres Durchfließen
+    this.maxGeschwindigkeit = 3.5; // Erhöht für schnelleres Durchfließen (war 3.0)
     this.abprallZähler = 0;
     this.steckenZähler = 0;
     this.letztePos = createVector(x, y);
-    this.lebensdauer = random(300, 600); // Lebensdauer hinzufügen, falls Teilchen trotzdem steckenbleiben
+    this.lebensdauer = random(500, 800); // Angepasste Lebensdauer (war 300-600 / 400-700)
   }
 
   wendeKraftAn(kraft) {
@@ -138,19 +146,18 @@ class Teilchen {
     this.pos.add(this.vel);
     this.acc.mult(0);
     
-    // Prüfen ob Teilchen steckengeblieben ist - empfindlicher reagieren
+    // Prüfen ob Teilchen steckengeblieben ist
     let bewegungsDist = dist(this.pos.x, this.pos.y, this.letztePos.x, this.letztePos.y);
-    if (bewegungsDist < 0.3) { // Erhöht von 0.2 auf 0.3 für frühere Erkennung
+    if (bewegungsDist < 0.25) { // Schwellenwert für Steckenbleiben (war 0.3)
       this.steckenZähler++;
     } else {
       this.steckenZähler = 0;
     }
     
-    // Teilchen schneller befreien
-    if (this.steckenZähler > 10) { // Reduziert von 15 auf 10
-      // Stärkere Befreiungsbewegung
-      this.vel = p5.Vector.random2D().mult(this.maxGeschwindigkeit * 1.2);
-      this.vel.y = -abs(this.vel.y) * 1.5; // Stärker nach oben
+    // Teilchen befreien, wenn es zu lange steckt
+    if (this.steckenZähler > 12) { // Schwellenwert (war 10)
+      // Stärkere, gezieltere Befreiungsbewegung, primär nach oben
+      this.vel.set(random(-this.maxGeschwindigkeit * 0.4, this.maxGeschwindigkeit * 0.4), -this.maxGeschwindigkeit * 1.3);
       this.steckenZähler = 0;
     }
     
@@ -170,31 +177,29 @@ class Teilchen {
         // Normalen-Vektor (senkrecht zur Linie)
         let normalenVektor = createVector(-linienVektor.y, linienVektor.x);
         
-        // Reflexion mit mehr Betonung auf die Bewegung entlang der Linie
         let reflexion = this.reflexion(this.vel, normalenVektor);
         
-        // Zurücksetzen, um Eindringen zu vermeiden
-        this.pos.sub(this.vel.copy().mult(1.1));
+        // Zurücksetzen, um Eindringen zu vermeiden - etwas stärker
+        this.pos.sub(this.vel.copy().mult(1.2)); // War 1.1
         
-        // Neue Geschwindigkeit setzen
-        this.vel = reflexion.mult(0.9);
+        // Neue Geschwindigkeit setzen mit leichter Dämpfung
+        this.vel = reflexion.mult(0.85); // War 0.9
         
         // Die Geschwindigkeit in Richtung der Linie erhöhen
-        // Dies hilft den Teilchen, entlang der Linien zu fließen
         let tangentialGeschw = p5.Vector.dot(this.vel, linienVektor);
-        let tangentialBoost = linienVektor.copy().mult(abs(tangentialGeschw) * 0.5); // Von 0.3 auf 0.5 erhöht
+        let tangentialBoost = linienVektor.copy().mult(abs(tangentialGeschw) * 0.65); // Stärkerer Boost (war 0.5)
         this.vel.add(tangentialBoost);
         
-        // Nach oben tendieren - stärker
-        if (this.vel.y > 0 && random() < 0.8) { // Höhere Wahrscheinlichkeit (0.7 -> 0.8)
-          this.vel.y *= -0.9; // Stärkere Umkehr (-0.7 -> -0.9)
+        // Nach oben tendieren - stärker und wahrscheinlicher
+        if (this.vel.y > 0 && random() < 0.85) { // Höhere Wahrscheinlichkeit (war 0.8)
+          this.vel.y *= -0.95; // Stärkere Umkehr (war -0.9)
         }
         
         this.abprallZähler++;
         
         // Wenn ein Teilchen zu oft abprallt, bekommt es einen stärkeren Auftriebs-Impuls
-        if (this.abprallZähler > 2) { // Reduziert von 3 auf 2
-          this.vel.add(createVector(0, -1.5)); // Verstärkt von -1.2 auf -1.5
+        if (this.abprallZähler > 2) { // Schwelle beibehalten (war 2)
+          this.vel.add(createVector(0, -2.2)); // Stärkerer Impuls (war -1.5 / -2.0)
           this.abprallZähler = 0;
         }
         
@@ -202,9 +207,9 @@ class Teilchen {
       }
     }
     
-    // Häufiger nach oben ausrichten
-    if (!kollidiert && random() < 0.05) { // Erhöht von 0.02 auf 0.05
-      this.vel.y = mix(this.vel.y, -this.maxGeschwindigkeit, 0.4); // Stärker ausrichten (0.3 -> 0.4)
+    // Häufiger und stärker nach oben ausrichten, wenn keine Kollision
+    if (!kollidiert && random() < 0.06) { // Etwas häufiger (war 0.05)
+      this.vel.y = mix(this.vel.y, -this.maxGeschwindigkeit, 0.45); // Stärker ausrichten (war 0.4)
     }
   }
 
@@ -232,8 +237,8 @@ class Teilchen {
   }
 
   zeige() {
-    stroke(0, 100, 255);
-    strokeWeight(2);
+    stroke(0, 100, 255, 200); // Alpha für leichten Glaseffekt oder bessere Sichtbarkeit
+    strokeWeight(2.5); // Etwas dickere Partikel
     point(this.pos.x, this.pos.y);
   }
 }
@@ -241,7 +246,7 @@ class Teilchen {
 class Abstosser {
   constructor(x, y) {
     this.position = createVector(x, y);
-    this.stärke = 300;
+    this.stärke = 350; // Stärker (war 300)
   }
 
   stoßeAb(teilchen) {
