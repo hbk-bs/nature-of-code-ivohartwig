@@ -1,0 +1,72 @@
+html {
+    height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center; /* Centers the main container on the page */
+  align-items: center; /* Vertically centers main if content is smaller than viewport */
+  margin: 0;
+  font-family: sans-serif;
+  background-color: white;
+  min-height: 100vh; /* Ensures body takes at least full viewport height */
+}
+
+main {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center;   /* Center children horizontally */
+    justify-content: flex-start; /* Align children to the top of main */
+    padding: 20px;         /* Add some padding around the content in main */
+    gap: 15px;             /* Space between the sketch, link, and sections */
+}
+
+#sketch {
+  margin-bottom: 10px; /* Optional: add some specific space below the canvas */
+}
+
+.NAVWEB {
+  background-color: #989898c7;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  width: 320px;
+  padding: 5px 0; /* Added some vertical padding */
+}
+
+.NAVWEB2 {
+    background-color: #989898c7;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    width: 320px;
+    padding: 5px 0; /* Added some vertical padding */
+  }
+
+.navtext {
+  color: white;
+  text-align: center;
+  padding: 2px;
+  margin: 5px 0; /* Adjust margin for h2 inside NAVWEB */
+  font-size: 1em; /* Adjust font size as needed */
+}
+
+a {
+  color: #337ab7; /* Example link color */
+  text-decoration: none;
+  margin-bottom: 10px; /* Space below the link */
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+input[type="number"] {
+  width: 50px;
+  padding: 2px;
+  text-align: center;
+  margin: 0 5px;
+}
+
+button {
+  padding: 2px 8px;
+  cursor: pointer;
+}

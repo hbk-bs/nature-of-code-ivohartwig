@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js Starter Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+    <div id="sketch"></div>
+    <section class="NAVWEB2">
+        <h2 class="navtext"><a href="index.js">Source Code</a></h2>
+      </section>
+    
+    
+    <section class="NAVWEB">
+        <h2 class="navtext">LINENABSTAND: 
+            <input type="number" id="line-spacing" min="5" max="50" value="15">
+            <button onclick="updateAbstand()">Set</button>
+        </h2>
+    </section>
+
+    <section class="NAVWEB">
+        <h2 class="navtext">LINIENFORM: 
+            <input type="number" id="noise-scale" min="0.01" max="0.2" step="0.01" value="0.05">
+            <button onclick="updateRauschSkala()">Set</button>
+        </h2>
+    </section>
+
+    <!-- Füge eine Debug-Sektion hinzu -->
+    <section class="NAVWEB">
+        <h2 class="navtext">DEBUG: 
+            <button onclick="toggleLines()">Linien anzeigen</button>
+        </h2>
+    </section>
+</main>
+    <script src="../modules1/p5/lib/p5.min.js"></script>
+    <script src="../modules1/p5/lib/addons/p5.sound.min.js"></script> 
+   <!-- <script src="./modules/@ff6347/p5-easing/dist/p5.easing.min.js"></script> -->
+   <script src="index.js"></script>
+</body>
+</html>
