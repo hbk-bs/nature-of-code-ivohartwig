@@ -5,6 +5,7 @@ let abstosser = [];
 let abstand = 15; // Make abstand global with default value 15
 let rauschSkala = 0.05;
 let überstand = 50;
+let shouldShowGreyBackgroundLines = true; // Variable to control grey line visibility
 
 function setup() {
   let canvas = createCanvas(300, 300); // Kleinere Canvas zum Testen, bei Bedarf anpassen
@@ -89,7 +90,11 @@ function zeichneMusterLinie(y, rauschSkala, überstand) {
 }
 
 function draw() {
-  image(grundBild, 0, 0);
+  if (shouldShowGreyBackgroundLines) {
+    image(grundBild, 0, 0); // Show background with grey lines
+  } else {
+    background("white"); // Show plain white background
+  }
 
   for (let t of teilchen) {
     // Auftrieb nochmals verstärken <--- *** Änderung hier ***
@@ -334,4 +339,16 @@ function mousePressed() {
   
   // Optional: Add some feedback that the simulation was reset
   console.log("Simulation reset");
+}
+
+// Function for YES button: ensures grey lines are shown
+function toggleLines() {
+  shouldShowGreyBackgroundLines = true;
+  console.log("Grey background lines: YES (visible)");
+}
+
+// Function for NO button: ensures grey lines are hidden (white background)
+function removeGreyLines() {
+  shouldShowGreyBackgroundLines = false;
+  console.log("Grey background lines: NO (hidden, white background)");
 }

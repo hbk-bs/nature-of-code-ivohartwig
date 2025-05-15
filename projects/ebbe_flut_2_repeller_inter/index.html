@@ -15,23 +15,26 @@
     
     
     <section class="NAVWEB">
-        <h2 class="navtext">LINENABSTAND: 
+        <h2 class="navtext">LINE SPACING: 
             <input type="number" id="line-spacing" min="5" max="50" value="15">
-            <button onclick="updateAbstand()">Set</button>
+            <button onclick="updateAbstand()">SET</button>
         </h2>
+        <h2 class="navtext2">NUMBER BETWEEN 5 AND 50</h2>
     </section>
 
     <section class="NAVWEB">
-        <h2 class="navtext">LINIENFORM: 
+        <h2 class="navtext">LINE SHAPE: 
             <input type="number" id="noise-scale" min="0.01" max="0.2" step="0.01" value="0.05">
-            <button onclick="updateRauschSkala()">Set</button>
+            <button onclick="updateRauschSkala()">SET</button>
         </h2>
+        <h2 class="navtext2">NUMBER BETWEEN 0 AND 0.2</h2>
     </section>
 
     <!-- Füge eine Debug-Sektion hinzu -->
     <section class="NAVWEB">
         <h2 class="navtext">DEBUG: 
-            <button onclick="toggleLines()">Linien anzeigen</button>
+            <button onclick="toggleLines()">YES</button>
+            <button onclick="removeGreyLines()">NO</button>
         </h2>
     </section>
 </main>

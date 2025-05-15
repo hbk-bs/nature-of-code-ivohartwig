@@ -27,18 +27,23 @@ main {
 
 .NAVWEB {
   background-color: #989898c7;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  width: 320px;
-  padding: 5px 0; /* Added some vertical padding */
+      margin-bottom: 10px;
+      border-radius: 10px;
+      width: 300px;
 }
 
 .NAVWEB2 {
-    background-color: #989898c7;
+  background-color: #989898c7;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  width: 300px;
+  }
+
+  .NAVWEB2:hover {
+    background-color:black;
     margin-bottom: 10px;
     border-radius: 10px;
-    width: 320px;
-    padding: 5px 0; /* Added some vertical padding */
+    width: 300px;
   }
 
 .navtext {
@@ -49,15 +54,26 @@ main {
   font-size: 1em; /* Adjust font size as needed */
 }
 
+.navtext2 {
+  font-style: italic;
+  color: white;
+  text-align: center;
+  padding: 2px;
+  margin: 5px 0; /* Adjust margin for h2 inside NAVWEB */
+  font-size: 0.8em; /* Adjust font size as needed */
+}
+
 a {
-  color: #337ab7; /* Example link color */
+  color: white; /* Example link color */
   text-decoration: none;
   margin-bottom: 10px; /* Space below the link */
 }
 
-a:hover {
-  text-decoration: underline;
+
+canvas {
+  border-radius: 10px;
 }
+
 
 input[type="number"] {
   width: 50px;
